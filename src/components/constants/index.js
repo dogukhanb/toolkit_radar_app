@@ -1,4 +1,4 @@
-const options = {
+export const options = {
   method: "GET",
   url: "https://flight-radar1.p.rapidapi.com/flights/list-in-boundary",
   params: {
@@ -14,4 +14,9 @@ const options = {
   },
 };
 
-export const doptions = {};
+export const dOptions = {
+  headers: {
+    "X-RapidAPI-Key": "45265695a1mshe1b7ae3dc7b3f5ap19e428jsnea5e60b503cb",
+    "X-RapidAPI-Host": "flight-radar1.p.rapidapi.com",
+  },
+};

@@ -1,20 +1,29 @@
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { useSelector } from "react-redux";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polyline,
+} from "react-leaflet";
+import { useDispatch, useSelector } from "react-redux";
 import { icon } from "leaflet";
+import { setPath } from "../redux/slices/flightSlice";
 
-const MapView = () => {
-  const { flights } = useSelector((store) => store.flight);
+const MapView = ({ setDetailId }) => {
+  const { flights, path } = useSelector((store) => store.flight);
 
-  // Create custom icon
-  const planeIcon = L.icon({
+  const dispatch = useDispatch();
+
+  // marker için kendi iconumuzu oluşturalım
+  const planeIcon = icon({
     iconUrl: "plane-icon.png",
     iconSize: [30, 30],
   });
 
   return (
     <MapContainer
-      center={[38.891818, 34.435076]}
+      center={[38.891818, 35.435076]}
       zoom={6}
       scrollWheelZoom={true}
     >
@@ -24,24 +33,29 @@ const MapView = () => {
       />
       {flights.map((flight) => (
         <Marker
+          key={flight.id}
           icon={planeIcon}
           position={[flight.lat, flight.lng]}
-          key={flight.id}
         >
           <Popup>
             <div className="d-flex flex-column gap-2">
               <span>Kod: {flight.code}</span>
-              <button
-                onClick={() => console.log("Detay:", flight.id)}
-                className="w-100"
-              >
+
+              <button onClick={() => setDetailId(flight.id)} className="w-100">
                 Detay
               </button>
+
+              {path.length > 0 && (
+                <button onClick={() => dispatch(setPath([]))}>
+                  Rotayı Temizle
+                </button>
+              )}
             </div>
           </Popup>
         </Marker>
       ))}
-      {/*  <Marker> </Marker> */}
+
+      <Polyline positions={path} />
     </MapContainer>
   );
 };

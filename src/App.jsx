@@ -4,12 +4,15 @@ import MapView from "./pages/MapView";
 import ListView from "./pages/ListView";
 import { useDispatch } from "react-redux";
 import { getFlights } from "./redux/actions";
-import Modal from "./components/Modal"; // Importing default export Modal
+import Modal from "./components/Modal";
 
 const App = () => {
-  //harita görünümü aktif mi?
+  // harita görünümü aktif mi?
   const [isMapView, setIsMapView] = useState(true);
+
+  // detayı gösterilecek elemanın id'si
   const [detailId, setDetailId] = useState(null);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,6 +22,7 @@ const App = () => {
   return (
     <div>
       <Header />
+
       <div className="view-buttons">
         <button
           className={isMapView ? "active" : ""}
@@ -33,7 +37,13 @@ const App = () => {
           Liste Görünümü
         </button>
       </div>
-      {isMapView ? <MapView setDetailId={setDetailId} /> : <ListView />}
+
+      {isMapView ? (
+        <MapView setDetailId={setDetailId} />
+      ) : (
+        <ListView setDetailId={setDetailId} />
+      )}
+
       {detailId && (
         <Modal detailId={detailId} close={() => setDetailId(null)} />
       )}
